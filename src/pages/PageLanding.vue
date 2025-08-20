@@ -16,39 +16,49 @@
           </q-avatar>
           <span class="text-weight-bold">Equipe</span>
         </q-toolbar-title>
+
         <div class="gt-sm row items-center q-gutter-sm">
           <q-btn flat label="Equipe" @click="scrollTo('cards')" />
           <q-btn flat label="Depoimentos" @click="scrollTo('testimonials')" />
           <q-separator vertical inset class="q-mx-sm" />
+
           <q-toggle
-            v-model="$q.dark.isActive"
+            :model-value="$q.dark.isActive"
             color="white"
             checked-icon="dark_mode"
             unchecked-icon="light_mode"
             :label="$q.dark.isActive ? 'Dark' : 'Light'"
             class="q-ml-md"
+            @update:model-value="(val) => $q.dark.set(val)"
           />
         </div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" side="left" overlay class="bg-grey-1">
+    <q-drawer
+      v-model="leftDrawerOpen"
+      side="left"
+      overlay
+      :class="$q.dark.isActive ? 'bg-dark text-white' : 'bg-grey-1'"
+    >
       <q-list bordered padding>
-        <q-item clickable v-ripple @click="navAndClose('cards')"
-          ><q-item-section>Equipe</q-item-section></q-item
-        >
-        <q-item clickable v-ripple @click="navAndClose('testimonials')"
-          ><q-item-section>Depoimentos</q-item-section></q-item
-        >
+        <q-item clickable v-ripple @click="navAndClose('cards')">
+          <q-item-section>Equipe</q-item-section>
+        </q-item>
+        <q-item clickable v-ripple @click="navAndClose('testimonials')">
+          <q-item-section>Depoimentos</q-item-section>
+        </q-item>
         <q-separator spaced />
         <q-item>
           <q-item-section>
+            <!-- toggle ligado ao Dark Plugin -->
             <q-toggle
-              v-model="$q.dark.isActive"
+              :model-value="$q.dark.isActive"
               color="primary"
               checked-icon="dark_mode"
               unchecked-icon="light_mode"
               :label="$q.dark.isActive ? 'Dark' : 'Light'"
+              @update:model-value="(val) => $q.dark.set(val)"
             />
           </q-item-section>
         </q-item>
@@ -67,7 +77,7 @@
                 </div>
                 <div class="text-subtitle1 q-mb-lg opacity-80">
                   Uma LP de brincadeira pra mostrar Quasar na prática: cards dos membros da equipe e
-                  depoimentos que só quem vive o dev‑dia‑a‑dia entende 😄
+                  depoimentos que só quem vive o dev-dia-a-dia entende 😄
                 </div>
                 <div class="row q-gutter-sm">
                   <q-btn
@@ -78,20 +88,6 @@
                     @click="scrollTo('cards')"
                   />
                 </div>
-              </div>
-              <div class="col-12 col-md-5 q-mt-lg q-mt-none-md">
-                <q-card bordered class="hero-card">
-                  <q-card-section class="text-center">
-                    <q-avatar size="96px" class="q-mb-sm"
-                      ><img :src="heroPreview" alt="meme"
-                    /></q-avatar>
-                    <div class="text-subtitle1 q-mb-xs">Imagem destaque</div>
-                    <div class="text-caption q-mb-md">
-                      Substitua por um meme da equipe (src/assets/hero.jpg)
-                    </div>
-                    <q-btn label="Trocar preview" flat @click="swapHero()" />
-                  </q-card-section>
-                </q-card>
               </div>
             </div>
           </div>
@@ -126,7 +122,7 @@
                       <q-badge
                         v-for="(tag, j) in p.tags"
                         :key="j"
-                        color="primary"
+                        color="accent"
                         outline
                         class="q-mr-sm q-mb-sm"
                         >{{ tag }}</q-badge
@@ -148,9 +144,9 @@
         <q-dialog v-model="profileDialog">
           <q-card style="max-width: 700px; width: 95vw">
             <q-card-section class="row items-center q-gutter-md">
-              <q-avatar size="96px"
-                ><img :src="current?.photo || placeholderImg" :alt="current?.name"
-              /></q-avatar>
+              <q-avatar size="96px">
+                <img :src="current?.photo || placeholderImg" :alt="current?.name" />
+              </q-avatar>
               <div>
                 <div class="text-h6">{{ current?.name }}</div>
                 <div class="text-caption">Habilidade: {{ current?.power }}</div>
@@ -230,13 +226,6 @@ function navAndClose(id) {
   leftDrawerOpen.value = false
 }
 
-const heroImgs = ['https://i.pravatar.cc/300?img=12', 'https://i.pravatar.cc/300?img=33']
-const heroPreview = ref(heroImgs[0])
-function swapHero() {
-  heroPreview.value = heroPreview.value === heroImgs[0] ? heroImgs[1] : heroImgs[0]
-}
-
-// ==== PEOPLE ====
 const placeholderImg = 'https://i.pravatar.cc/600?img=5'
 const people = ref([
   {
@@ -254,7 +243,7 @@ const people = ref([
   },
   {
     name: 'Elias (Cleitin)',
-    power: 'Dados, relatórios e… quebra-códigos profissional',
+    power: 'Dados, BIs e… quebra-código',
     icon: 'table_view',
     photo: new URL('../assets/equipe/cleitin.png', import.meta.url).href,
     tags: ['Power BI', 'data vibes', 'caso à parte'],
@@ -268,7 +257,7 @@ const people = ref([
   },
   {
     name: 'Israel',
-    power: 'Engenheiro de prompt / vibe coder',
+    power: 'Engenheiro de prompt',
     icon: 'psychology',
     photo: new URL('../assets/equipe/Israel.png', import.meta.url).href,
     tags: ['veio do fiscal', 'estagiário'],
@@ -310,9 +299,9 @@ const people = ref([
   },
   {
     name: 'Jullia (vulgo eu)',
-    power: 'Front imbatível (a culpa não é do front)',
+    power: 'Front imbatível',
     icon: 'code',
-    photo: '',
+    photo: new URL('../assets/equipe/eu2.jpeg', import.meta.url).href,
     tags: ['frontend', 'não é culpa do front', 'lead da LP'],
     jokes: [
       '“A culpa nunca é do front e sim do backend.”',
@@ -371,49 +360,92 @@ const testimonials = [
 ]
 </script>
 
-<style scoped>
+<style>
+/* ===== Variáveis de tema ===== */
+:root {
+  --bg: #ffffff; /* fundo claro padrão */
+  --section-bg: #ffffff;
+  --alt-bg: #f7f7f7;
+}
+
+body.body--dark {
+  --bg: #0d111a; /* fundo global escuro */
+  --section-bg: #0d111a;
+  --alt-bg: #141a24;
+}
+
+/* ===== Fundo global realmente aplicado ===== */
+html,
+body,
+#q-app {
+  min-height: 100%;
+}
+
+body,
+.q-layout,
+.q-page-container,
+.q-page {
+  background: var(--bg) !important;
+}
+
 .page {
   background: var(--bg);
 }
-.container {
-  max-width: 1140px;
-  margin: 0 auto;
-  padding: 0 16px;
-}
-.hero {
-  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-}
-.brand {
-  text-decoration: underline;
-}
-.opacity-80 {
-  opacity: 0.8;
-}
-.hero-card {
-  backdrop-filter: blur(6px);
-  border-radius: 16px;
-}
+
 .section {
   background: var(--section-bg);
 }
 .alt {
   background: var(--alt-bg);
 }
+
+/* ===== Layout util ===== */
+.container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* ===== Hero ===== */
+.hero {
+  background: linear-gradient(135deg, #2e354c 0%, #3a4360 100%);
+  color: #fff;
+}
+
+/* suaviza a hero no dark sem perder o gradiente */
+body.body--dark .hero {
+  filter: brightness(0.9);
+}
+
+.brand {
+  text-decoration: underline;
+}
+.opacity-80 {
+  opacity: 0.8;
+}
+
+.hero-card {
+  backdrop-filter: blur(6px);
+  border-radius: 16px;
+}
+
 .hero-card-item {
   border-radius: 14px;
   overflow: hidden;
 }
 
-:root,
-:host {
-  --bg: #ffffff;
-  --section-bg: #ffffff;
-  --alt-bg: #f7f7f8;
+/* ===== Badges / icons ===== */
+.q-badge.bg-accent {
+  color: #2e354c !important;
+  border-color: rgba(46, 53, 76, 0.2);
 }
-:root.body--dark,
-:host(.body--dark) {
-  --bg: #111827;
-  --section-bg: #0f172a;
-  --alt-bg: #0b1220;
+
+body.body--dark .q-badge.bg-accent {
+  color: #0d111a !important;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.q-card .q-icon {
+  opacity: 0.9;
 }
 </style>
