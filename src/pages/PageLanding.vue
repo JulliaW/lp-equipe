@@ -305,7 +305,6 @@ const people = ref([
     tags: ['frontend', 'não é culpa do front', 'lead da LP'],
     jokes: [
       '“A culpa nunca é do front e sim do backend.”',
-      'Revisa PR com detector de API lerdinha.',
       'Responsável por essa LP de zoeira. 😎',
     ],
     kudos: 12,
@@ -374,7 +373,6 @@ body.body--dark {
   --alt-bg: #141a24;
 }
 
-/* ===== Fundo global realmente aplicado ===== */
 html,
 body,
 #q-app {
@@ -399,22 +397,15 @@ body,
   background: var(--alt-bg);
 }
 
-/* ===== Layout util ===== */
 .container {
   max-width: 1140px;
   margin: 0 auto;
   padding: 0 16px;
 }
 
-/* ===== Hero ===== */
 .hero {
   background: linear-gradient(135deg, #2e354c 0%, #3a4360 100%);
   color: #fff;
-}
-
-/* suaviza a hero no dark sem perder o gradiente */
-body.body--dark .hero {
-  filter: brightness(0.9);
 }
 
 .brand {
